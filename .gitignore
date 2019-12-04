@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+# VSCODE
+**/.vscode
+*/.vscode

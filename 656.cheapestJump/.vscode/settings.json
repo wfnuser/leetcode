@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "*.wpy": "vue",
-        "*.acss": "css",
-        "*.axml": "html",
-        "*.scm": "scheme",
-        "iostream": "cpp"
-    }
-}
