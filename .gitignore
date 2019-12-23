@@ -34,3 +34,6 @@
 # VSCODE
 **/.vscode
 */.vscode
+
+# idea
+.idea
