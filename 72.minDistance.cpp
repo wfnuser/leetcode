@@ -4,8 +4,8 @@ public:
         int l1 = word1.length();
         int l2 = word2.length();
         
-        if (l1 > l2) return minDistance(word2, word1);
         if (l1 == 0) return l2;
+        if (l2 == 0) return l1;
 
         vector<vector<int>> dp(l1, vector<int>(l2, 0));
 
