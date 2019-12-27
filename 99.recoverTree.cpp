@@ -1,56 +1,48 @@
 /**
- * Definition for singly-linked list.
- * struct ListNode {
+ * Definition for a binary tree node.
+ * struct TreeNode {
  *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
 class Solution {
 public:
-    ListNode* reverseBetween(ListNode* head, int m, int n) {
-        if (m == n) return head;
-        if (head->next == NULL) return head;
-        if (head->next->next == NULL) {
-            ListNode* next = head->next;
-            next->next = head;
-            head->next = NULL;
-            return next;
+    TreeNode* traversal(TreeNode* root, TreeNode* min, TreeNode* max) {
+        if (root == NULL) return NULL;
+        if ((max != NULL && root->val >= max->val)) {
+            TreeNode* leftNode = traversal(root->left, min, max);
+            if (leftNode != NULL) return leftNode;
+            return root;
         }
-        ListNode* dummyHead = new ListNode(0);
-        dummyHead->next = head;
-        ListNode* pre = dummyHead;
-        ListNode* cur = dummyHead->next;
-        ListNode* next = cur->next;
-
-        ListNode* first;
-        ListNode* last;
-
-        for (int i = 0; i < m-1; i++) {
-            pre = pre->next;
-        }
-        cur = pre->next;
-        next= cur->next;
-        first = pre;
-        last = cur; 
-        for (int i = m-1; i < n; i++) {
-            last = last->next;
+        if ((min != NULL && root->val <= min->val)) {
+            TreeNode* rightNode = traversal(root->right, min, max);
+            if (rightNode != NULL) return rightNode;
+            return root;
         }
 
-        cur->next = last;
-        pre = cur;
-        cur = next;
-        next = next->next;
-        for (int i = m + 1; i < n ; i++) {
-            cur->next = pre;
-            pre = cur;
-            cur = next;
-            next = next->next;
-        }
-        cout << cur->val << endl;
-        cur->next = pre;
-        first->next = cur;
+        TreeNode* leftNode = traversal(root->left, min, root);
+        TreeNode* rightNode = traversal(root->right, root, max);
 
-        return dummyHead->next;
+        if (leftNode != NULL && rightNode != NULL) {
+            int tmp = leftNode->val;
+            leftNode->val = rightNode->val;
+            rightNode->val = tmp;
+            return NULL;
+        }
+        if (leftNode != NULL) return leftNode;
+        if (rightNode != NULL) return rightNode;
+
+        return NULL;
+    }
+
+    void recoverTree(TreeNode* root) {
+        TreeNode* node = traversal(root, NULL, NULL);
+        if (node != NULL) {
+            int tmp = node->val;
+            node->val = root->val;
+            root->val = tmp;
+        }
     }
 };
