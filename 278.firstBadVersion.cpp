@@ -8,7 +8,7 @@ public:
         int r = n;
 
         while (l < r) {
-            long mid = ((long)l+(long)r)/2;
+            int mid = l + (r - l) / 2;
             if (isBadVersion(mid)) {
                 r = mid;
             } else {
