@@ -21,7 +21,7 @@ public:
             }
             string minS = to_string(min);
             if (min < 10) minS = "0" + minS;
-            if (min > 60) return;
+            if (min >= 60) return;
             if (hour >= 12) return;
             ans.push_back(to_string(hour)+":"+minS);
         } else {
