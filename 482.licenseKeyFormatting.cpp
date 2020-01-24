@@ -1,3 +1,7 @@
+// 这道题是一个非常有价值的教训
+// string s;
+// s += 'x' 和 s = 'x' + s的时空效率都是完全不同的
+// 一开始是直接 s = 'x' + s这样写 时间不一定超 但是空间告诉我超了
 class Solution {
 public:
     string licenseKeyFormatting(string S, int K) {
