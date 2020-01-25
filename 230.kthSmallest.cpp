@@ -9,18 +9,24 @@
  */
 class Solution {
 public:
-    vector<int> sortedV;
-
-    void dfs(TreeNode* root) {
+    int cnt = 0;
+    int ans;
+    bool found = false;
+    void dfs(TreeNode* root, int k) {
+        if (found) return;
         if (root == NULL) return;
-        dfs(root->left);
-        sortedV.push_back(root->val);
-        dfs(root->right);
+        dfs(root->left, k);
+        cnt++;
+        if (cnt == k) {
+            ans = root->val;
+            found = true;
+        } 
+        dfs(root->right, k);
     };
 
     int kthSmallest(TreeNode* root, int k) {
-        dfs(root);
+        dfs(root, k);
 
-        return sortedV[k-1];
+        return ans;
     }
 };
