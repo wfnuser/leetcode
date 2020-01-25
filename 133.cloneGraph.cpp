@@ -16,6 +16,7 @@ public:
     unordered_map<int, Node*> nodes;
 
     Node* cloneGraph(Node* node) {
+        if (!node) return NULL;
         if (nodes[node->val]) return nodes[node->val];
         Node* n = new Node();
         n->val = node->val;
