@@ -1,10 +1,7 @@
 class Solution {
 public:
     string parseTernary(string expression) {
-        stack<string> S;
-
         int index = 0;
-        
         while(true) {
             char tf = expression[index];
             if (tf == 'T') {
