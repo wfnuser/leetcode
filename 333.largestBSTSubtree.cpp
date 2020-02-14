@@ -29,32 +29,20 @@ public:
         int tmp = 1;
         int minN = root->val;
         int maxN = root->val;
+
+        if ((root->left && (dp[root->left].size == 0 || root->val <= dp[root->left].max)) || (root->right && (dp[root->right].size == 0 || root->val >= dp[root->right].min))) {
+            isBST = false;
+        }
         if (root->left) {
-            if (dp[root->left].size == 0) {
-                isBST = false;
-            } else {
-                if (root->val <= dp[root->left].max) {
-                    isBST = false;
-                } else {
-                    minN = min(minN, dp[root->left].min);
-                    tmp = tmp + dp[root->left].size;
-                }
-            }
+            minN = min(minN, dp[root->left].min);
+            tmp = tmp + dp[root->left].size;
         }
         if (root->right) {
-            if (dp[root->right].size == 0) {
-                isBST = false;
-            } else {
-                if (root->val >= dp[root->right].min) {
-                    isBST = false;
-                } else {
-                    maxN = max(maxN, dp[root->right].max);
-                    tmp = tmp + dp[root->right].size;
-                }
-            }
+            maxN = max(maxN, dp[root->right].max);
+            tmp = tmp + dp[root->right].size;
         }
-        dp[root] = DP();
 
+        dp[root] = DP();
         if (isBST) {
             dp[root].size = tmp;
             dp[root].min = minN;
