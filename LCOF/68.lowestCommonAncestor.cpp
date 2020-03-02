@@ -39,8 +39,6 @@ public:
         int len = min(p1.size(), p2.size());
         TreeNode* ans;
 
-       
-
         for (int i = 0; i < len; i++) {
             if (p1[i] == p2[i]) {
                 ans = p1[i];
