@@ -1,56 +1,43 @@
-/*
- * @lc app=leetcode.cn id=282 lang=cpp
- *
- * [282] 给表达式添加运算符
- *
- * https://leetcode-cn.com/problems/expression-add-operators/description/
- *
- * algorithms
- * Hard (32.74%)
- * Likes:    75
- * Dislikes: 0
- * Total Accepted:    2.1K
- * Total Submissions: 6.3K
- * Testcase Example:  '"123"\n6'
- *
- * 给定一个仅包含数字 0-9 的字符串和一个目标值，在数字之间添加二元运算符（不是一元）+、- 或 * ，返回所有能够得到目标值的表达式。
- * 
- * 示例 1:
- * 
- * 输入: num = "123", target = 6
- * 输出: ["1+2+3", "1*2*3"] 
- * 
- * 
- * 示例 2:
- * 
- * 输入: num = "232", target = 8
- * 输出: ["2*3+2", "2+3*2"]
- * 
- * 示例 3:
- * 
- * 输入: num = "105", target = 5
- * 输出: ["1*0+5","10-5"]
- * 
- * 示例 4:
- * 
- * 输入: num = "00", target = 0
- * 输出: ["0+0", "0-0", "0*0"]
- * 
- * 
- * 示例 5:
- * 
- * 输入: num = "3456237490", target = 9191
- * 输出: []
- * 
- * 
- */
-
-// @lc code=start
 class Solution {
 public:
-    vector<string> addOperators(string num, int target) {
+    vector<string> ans;
+    int target;
 
+    void dfs(string& num, int step, int last, long res, string &str) {
+        if (step == num.size()) {
+            if (res == target) ans.push_back(str);
+            return;
+        }
+        int originSize = str.size();
+        for (int i = step; i < num.size(); i++) {
+            string curS = num.substr(step, i - step + 1);
+            long cur = stol(curS);
+            if (step == 0) {
+                str += curS;
+                dfs(num, i+1, cur, cur, str);
+                str.resize(originSize);
+            } else {
+                // +
+                str += "+" + curS;
+                dfs(num, i+1, cur, res+cur, str);
+                str.resize(originSize);
+                // -
+                str += "-" + curS;
+                dfs(num, i+1, -cur, res-cur, str);
+                str.resize(originSize);
+                // *
+                str += "*" + curS;
+                dfs(num, i+1, last*cur, res-last+last*cur, str);
+                str.resize(originSize);
+            }
+            if (cur == 0) break;
+        }
+    }
+
+    vector<string> addOperators(string num, int target) {
+        this->target = target;
+        string s = "";
+        dfs(num, 0, 0, 0, s);
+        return ans;
     }
 };
-// @lc code=end
-
