@@ -1,49 +1,35 @@
 class Twitter {
-    priority_queue<pair<int, int>> tweets; 
-    unordered_map<int, int> tweetBy;
-    unordered_map<int, unordered_set<int>> following;
-    int tweetCnt = 0;
-
 public:
-    /** Initialize your data structure here. */
+    bool a[510][510];//a[i][j]=true 表示i关注了j
+    deque<pair<int,int>> b[510];//每个b[i]保存i自己的最近10条推文时间和ID
+    long long time = 0;//每个推文发表的时间
     Twitter() {
-        
+        memset(a, 0, sizeof a);//初始化
+        for(int i = 0; i < 510; i++) a[i][i] = true;//自己必须关注自己
+        for(int i = 0; i < 510; i++) b[i].clear();
+        time = 0;
     }
-    
-    /** Compose a new tweet. */
-    void postTweet(int userId, int tweetId) {
-        tweets.push(make_pair(tweetCnt++, tweetId));
-        tweetBy[tweetId] = userId;
+    void postTweet(int x, int y) {//用户x发了一个推文y
+        time++;
+        if(b[x].size()>=10) b[x].pop_front();//把x最老的文章弹出
+        b[x].push_back({time,y});
     }
-    
-    /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
-    vector<int> getNewsFeed(int userId) {
-        vector<int> ans;
-        priority_queue<pair<int, int>> copy = tweets;
-        int maxLen = 10;
-        while(!copy.empty() && maxLen){
-            pair<int, int> tweet = copy.top();
-            copy.pop();
-            if (following[userId].find(tweetBy[tweet.second]) != following[userId].end() || tweetBy[tweet.second] == userId) {
-                maxLen--;
-                ans.push_back(tweet.second);
+    vector<int> getNewsFeed(int x) {//求出x所关注的人的最近10条消息
+        priority_queue<pair<int,int>> q;//大根堆 发文越新 就越在前面 
+        for(int i = 0; i < 510; i++){
+            if(a[x][i]){//若x关注了i 则要把i的前10条推文纳入待选集
+                for(auto v : b[i]) q.push(v);  
             }
         }
-        return ans;
+        vector<int> res;
+        for(int i = 0; i < 10&&!q.empty(); i++) res.push_back(q.top().second),q.pop();//把最新的十条纳入答案
+        return res;
     }
-    
-    /** Follower follows a followee. If the operation is invalid, it should be a no-op. */
-    void follow(int followerId, int followeeId) {
-        if (followeeId == followerId) return;
-        following[followerId].insert(followeeId);
+    void follow(int x, int y) {//x关注了y
+        a[x][y] = true;
     }
-    
-    /** Follower unfollows a followee. If the operation is invalid, it should be a no-op. */
-    void unfollow(int followerId, int followeeId) {
-        if (followeeId == followerId) return;
-        if (following[followerId].find(followeeId) != following[followerId].end()){
-            following[followerId].erase(following[followerId].find(followeeId));
-        }
+    void unfollow(int x, int y) {//x取关y
+        if(x!=y) a[x][y] = false;//注意 自己不能取关自己
     }
 };
 
