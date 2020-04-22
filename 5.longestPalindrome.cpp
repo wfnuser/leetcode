@@ -1,39 +1,45 @@
 class Solution {
-public:
+   public:
     string longestPalindrome(string s) {
-        int size = s.size();
-        int start = 0;
-        int end = 0;
-        int max = 0;
+        string t = "#";
+
+        for (auto c : s) {
+            t += c;
+            t += "#";
+        }
+
+        int maxRight = -1;
+        int center = 0;
+
+        int resLen = 0;
+        int resCenter = 0;
+
+        vector<int> p(t.size(), 0);
+        for (int i = 0; i < t.size(); i++) {
+            p[i] = maxRight > i ? min(p[2 * center - i], maxRight - i) : 1;
+
+            while ((i + p[i]) < t.size() && (i - p[i] >= 0) &&
+                   t[i + p[i]] == t[i - p[i]])
+                ++p[i];
+            p[i]--;
+
+            if (maxRight < (i + p[i])) {
+                maxRight = i + p[i];
+                center = i;
+            }
+
+            if (p[i] > resLen) {
+                resLen = p[i];
+                resCenter = i;
+            }
+        }
+
         string ans = "";
 
-        for (int i = 0; i < size; i++) {
-            pair<int, int> p = findPalindrome(i,i,s);
-            if (p.second-p.first>max) {
-                max = p.second-p.first;
-                start = p.first;
-                end = p.second;
-            }
-            p = findPalindrome(i,i+1,s);
-            if (p.second-p.first>max) {
-                max = p.second-p.first;
-                start = p.first;
-                end = p.second;
-            }
+        for (auto c : t.substr(resCenter - resLen, resLen * 2 + 1)) {
+            if (c != '#') ans += c;
         }
 
-        for (int i = start; i<=end; i++) {
-            ans += s[i];
-        }
-
-        return ans;   
+        return ans;
     }
-
-    pair<int, int> findPalindrome(int left, int right, string s) {
-        while(left>=0 && right<=s.size()-1 && s[left] == s[right]) {left--; right++;};
-        left++;
-        right--;
-        return make_pair(left, right);
-    }
-
 };
