@@ -9,37 +9,35 @@
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
-        ListNode* dummy = new ListNode(0);
-        ListNode* l = dummy;
 
-        while(true) {
-            if (l1 == NULL) {
-                while (l2 != NULL) {
-                    l->next = new ListNode(l2->val);
-                    l=l->next;
-                    l2 = l2->next;
-                }
-                break;
-            }
-            if (l2 == NULL) {
-                while (l1 != NULL) {
-                    l->next = new ListNode(l1->val);
-                    l=l->next;
-                    l1 = l1->next;
-                }
-                break;
-            }
-            int val1 = l1->val;
-            int val2 = l2->val;
-            if (val1>val2) {
-                l->next = new ListNode(val2);
-                l = l->next;
-                l2 = l2->next;
+        ListNode* p1 = l1;
+        ListNode* p2 = l2;
+
+        if (l1 == NULL && l2 == NULL) return NULL;
+
+        ListNode* dummy = new ListNode(0);
+        ListNode* p = dummy;
+
+        while(p1!=NULL && p2!=NULL) {
+            if (p1->val < p2->val) {
+                p->next = p1;
+                p1 = p1->next;
             } else {
-                l->next = new ListNode(val1);
-                l = l->next;
-                l1 = l1->next;
+                p->next = p2;
+                p2 = p2->next;
             }
+            p = p->next;
+        }
+
+        while(p1 != NULL) {
+            p->next = p1;
+            p1 = p1->next;
+            p = p->next;
+        }
+        while(p2 != NULL) {
+            p->next = p2;
+            p2 = p2->next;
+            p = p->next;
         }
 
         return dummy->next;
