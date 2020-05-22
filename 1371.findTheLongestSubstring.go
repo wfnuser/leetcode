@@ -1,5 +1,4 @@
 func findTheLongestSubstring(s string) int {
-    
     ans := 0;
     status := 0;
     pos := make([]int, 32);
