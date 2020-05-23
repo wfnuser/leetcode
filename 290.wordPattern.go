@@ -5,8 +5,8 @@ func wordPattern(pattern string, str string) bool {
 
 	wordMap := make(map[string]byte)
 	patternMap := make(map[byte]string)
-
-    if len(pattern) != len(words) {return false;}
+	
+	if len(pattern) != len(words) {return false;}
 
 	for idx, word := range words {
 		ch := pattern[idx]
