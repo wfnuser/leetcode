@@ -1,40 +1,33 @@
 class Solution {
 public:
     vector<vector<int>> ans;
-    map<int, int> cnt;         
+    unordered_map<int, int> cnt;
 
-    void printPath(vector<int> path) {
-        for (int i = 0; i < path.size(); i++) {
-            cout << path[i] << " ";
+    void dfs(int step, int n, vector<int>& path) {
+        if (step == n) {
+            vector<int> pathcp(path); 
+            ans.push_back(pathcp);
+            return;
         }
-        cout << endl;
-    }
 
-    void search(int pos, vector<int> nums, vector<int> path) {
-        // printPath(path);
-        if (pos >= nums.size()) ans.push_back(path);
-        for (int i = 0; i<nums.size(); i++) {
-            if (i>0 && nums[i-1] == nums[i]) continue;
-            if (cnt[nums[i]] > 0) {
-                cnt[nums[i]]--;
-                path.push_back(nums[i]);
-                search(pos+1, nums, path);
-                path.pop_back();
-                cnt[nums[i]]++;
-            } 
+        for (auto p: cnt) {
+            if (p.second == 0) continue;
+            path.push_back(p.first);
+            cnt[p.first]--;
+            dfs(step+1, n, path);
+            path.pop_back();
+            cnt[p.first]++;
         }
     }
 
     vector<vector<int>> permuteUnique(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
-        for (int i = 0; i<nums.size(); i++) {
-            if (cnt.find(nums[i]) != cnt.end()) {
-                cnt[nums[i]] += 1;
-            } else {
-                cnt[nums[i]] = 1;
-            }
+        int n = nums.size();
+        for (auto num: nums) {
+            cnt[num]++;
         }
-        search(0, nums, vector<int>());
+
+        vector<int> path;
+        dfs(0, n, path);
 
         return ans;
     }
