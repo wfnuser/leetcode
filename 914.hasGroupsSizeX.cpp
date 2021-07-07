@@ -1,9 +1,5 @@
 class Solution {
 public:
-    
-    unordered_map<int, int> cnt;
-    vector<int> nums;
-
     int gcd(int a, int b) {
         if (a < b) return gcd(b, a);
         if (b == 1) return 1;
@@ -11,23 +7,26 @@ public:
         return gcd(b, a%b);
     }
 
+
     bool hasGroupsSizeX(vector<int>& deck) {
-        for (auto num: deck) {
-            cnt[num]++;
-            if (cnt[num] == 1) nums.push_back(num);
+        int cnt[10001] = {0};
+
+        for (auto d: deck) {
+            cnt[d]++;
         }
 
-        if (nums.size() == 0) return false;
-        if (nums.size() == 1) {
-            return cnt[nums[0]] >= 2;
+        int g = -1;
+
+        for (int i = 0; i <= 10000; i++) {
+            if (cnt[i]) {
+                if (g == -1) {
+                    g = cnt[i];
+                } else {
+                    g = gcd(g, cnt[i]);
+                }
+            }
         }
 
-        int ans = cnt[nums[0]];
-        for (int i = 1; i < nums.size(); i++) {
-            ans = gcd(cnt[nums[i]], ans);
-            if (ans <= 1) return false;
-        }
-
-        return true;
+        return g >= 2;
     }
 };
