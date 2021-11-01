@@ -43,10 +43,11 @@ class Solution {
 public:
     int maxTwoEvents(vector<vector<int>>& events) {
         vector<Event> v;
-
+        v.resize(events.size() * 2, Event(0,0,0));
+        int i = 0;
         for (auto e: events) {
-            v.push_back(Event(0, e[0], e[2]));
-            v.push_back(Event(1, e[1], e[2]));
+            v[i++] = Event(0, e[0], e[2]);
+            v[i++] = Event(1, e[1], e[2]);
         }
         quicksort(v, 0, v.size() - 1);
         
