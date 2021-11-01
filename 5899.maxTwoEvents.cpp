@@ -13,15 +13,19 @@ public:
 
 void quicksort(vector<Event>& v, int left, int right) {
     if (left >= right) return;
+    int target = rand() % (right - left + 1);
+    swap(v[left+target], v[left]);
 
     Event pivot = v[left];
     int slow = left;
     int fast = left+1;
 
     while (fast <= right) {
-        if (v[fast].time > pivot.time || (v[fast].time == pivot.time && v[fast].type > pivot.type)) {
-            fast++;
-            continue;
+        if (v[fast].time > pivot.time || (v[fast].time == pivot.time && v[fast].type >= pivot.type)) {
+            if (v[fast].time > pivot.time || v[fast].type > pivot.type || rand()%2) {
+                fast++;
+                continue;
+            }
         }
         slow++;
         Event tmp = v[fast];
